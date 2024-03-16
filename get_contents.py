@@ -2,6 +2,7 @@
 import pandas as pd 
 import requests
 import json
+from exception_handling import get_response
 
 # Reading API Key from text file
 params_filename = 'params.txt'
@@ -23,11 +24,10 @@ header = {
 }
 
 # Submitting get request to pull data from RIOT database
-res = requests.get(URL, headers=header)
-response_status = res.status_code
+res = get_response('GET', URL, header)
 
 # Converting JSON reponse into Dict object
-dic_res = json.loads(res.content)
+dic_res = json.loads(res)
 
 # Getting the list of attributes from response
 print(dic_res.keys())
