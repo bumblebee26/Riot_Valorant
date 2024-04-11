@@ -1,14 +1,15 @@
 # Importing required libraries
 import pandas as pd 
-import requests
 import json
 from exception_handling import get_response
+import os
 
 # Reading API Key from text file
-params_filename = 'params.txt'
-key_d = {k:str(v) for k, v in (l.split('=') for l in open(params_filename))}
-API_KEY = key_d['APIKEY']
+# params_filename = 'params.txt'
+# key_d = {k:str(v) for k, v in (l.split('=') for l in open(params_filename))}
+# API_KEY = key_d['APIKEY']
 # print(API_KEY)
+API_KEY = os.environ.get('APIKEY')
 
 # RIOT url for Val/Contents
 region = 'ap' # LATAM, AP, NA, KR, BR, EU
@@ -30,7 +31,7 @@ res = get_response('GET', URL, header)
 dic_res = json.loads(res)
 
 # Getting the list of attributes from response
-print(dic_res.keys())
+# print(dic_res.keys())
 
 # Fetching content based on attribute
 game_version = dic_res['version']                                   # Game Version

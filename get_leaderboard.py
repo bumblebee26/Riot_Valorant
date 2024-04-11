@@ -2,12 +2,13 @@
 import pandas as pd 
 from exception_handling import get_response
 import json
+import os
 
 # Reading API Key from text file
-params_filename = 'params.txt'
-key_d = {k:str(v) for k, v in (l.split('=') for l in open(params_filename))}
-API_KEY = key_d['APIKEY']
-act_id = '22d10d66-4d2a-a340-6c54-408c7bd53807' # Get from Contents API
+# params_filename = 'params.txt'
+# key_d = {k:str(v) for k, v in (l.split('=') for l in open(params_filename))}
+# API_KEY = key_d['APIKEY']
+API_KEY = os.environ.get('APIKEY')
 # print(API_KEY)
 
 # Requests Header
@@ -76,12 +77,13 @@ def get_full_leaderboard(region, act_ID, total_players):
         res = get_response('GET', rep_URL, header)
         dic_res = json.loads(res)
         df_full_players_lb.append(pd.DataFrame(dic_res['players']))
-        print(no_of_pages)
+        # print(no_of_pages)
         no_of_pages-=1
     return pd.concat(df_full_players_lb)
 
 def load_leaderboard_all_region():
-    regions_list = 'LATAM,AP,NA,KR,BR,EU'.lower().split(',')
+    regions_list = str(os.environ.get('leaderboard_region')).lower().split(',')
+    act_id = os.environ.get('act')
     for region in regions_list:
         print(f'{str(region).upper()} Leaderboard loading....\n\n')
         region_meta = get_region_meta(region, act_id)
